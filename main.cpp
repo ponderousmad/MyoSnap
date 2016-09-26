@@ -1,4 +1,5 @@
 #include "CaptureEMG.h"
+#include "CaptureAudio.h"
 
 #include <iostream>
 #include <signal.h>
@@ -13,11 +14,20 @@ int main(int argc, char** argv)
 {
     signal(SIGINT, intHandler);
     
-    CaptureEMG capture;
-    if (capture.setup()) {
-        while(sRunning) {
-            capture.update();
-        }
+    CaptureEMG emg;
+    CaptureAudio audio;
+    if (!emg.setup()) {
+        std::cout << "EMG setup failed";
+        return -1;
+    }
+    if (!audio.setup()) {
+        std::cout << "Audio setup failed";
+        return -2;
+    }
+    
+    while(sRunning) {
+        emg.update();
     }
     std::cout << "And done!" << std::endl << std::endl;
+    return 0;
 }

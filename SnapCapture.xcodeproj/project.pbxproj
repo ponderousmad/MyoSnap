@@ -11,6 +11,8 @@
 		787AB3941D98B75B009A74F8 /* myo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 787AB3931D98B75B009A74F8 /* myo.framework */; };
 		787AB3961D98B82A009A74F8 /* myo.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 787AB3931D98B75B009A74F8 /* myo.framework */; };
 		787AB3991D995E37009A74F8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 787AB3981D995E37009A74F8 /* main.cpp */; };
+		787AB39C1D996F4D009A74F8 /* CaptureAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 787AB39A1D996F4D009A74F8 /* CaptureAudio.cpp */; };
+		787AB39E1D997088009A74F8 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 787AB39D1D997088009A74F8 /* AudioToolbox.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +34,9 @@
 		787AB3931D98B75B009A74F8 /* myo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = myo.framework; sourceTree = SOURCE_ROOT; };
 		787AB3971D995C6F009A74F8 /* CaptureEMG.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaptureEMG.h; sourceTree = SOURCE_ROOT; };
 		787AB3981D995E37009A74F8 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = SOURCE_ROOT; };
+		787AB39A1D996F4D009A74F8 /* CaptureAudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CaptureAudio.cpp; sourceTree = SOURCE_ROOT; };
+		787AB39B1D996F4D009A74F8 /* CaptureAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureAudio.h; sourceTree = SOURCE_ROOT; };
+		787AB39D1D997088009A74F8 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				787AB39E1D997088009A74F8 /* AudioToolbox.framework in Frameworks */,
 				787AB3941D98B75B009A74F8 /* myo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -69,6 +75,8 @@
 				4D04ADE419266DE6006E1C84 /* CaptureEMG.cpp */,
 				787AB3971D995C6F009A74F8 /* CaptureEMG.h */,
 				787AB3981D995E37009A74F8 /* main.cpp */,
+				787AB39A1D996F4D009A74F8 /* CaptureAudio.cpp */,
+				787AB39B1D996F4D009A74F8 /* CaptureAudio.h */,
 			);
 			name = Source;
 			path = "emg-data-sample";
@@ -77,6 +85,7 @@
 		4D1F5AA31926563B002845BB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				787AB39D1D997088009A74F8 /* AudioToolbox.framework */,
 				787AB3931D98B75B009A74F8 /* myo.framework */,
 			);
 			name = Frameworks;
@@ -135,6 +144,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				787AB3991D995E37009A74F8 /* main.cpp in Sources */,
+				787AB39C1D996F4D009A74F8 /* CaptureAudio.cpp in Sources */,
 				4D04ADE519266DE6006E1C84 /* CaptureEMG.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
