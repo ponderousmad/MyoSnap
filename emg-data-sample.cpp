@@ -4,8 +4,8 @@
 // This sample illustrates how to use EMG data. EMG streaming is only supported for one Myo at a time.
 
 #include <array>
+#include <vector>
 #include <iostream>
-#include <sstream>
 #include <stdexcept>
 #include <string>
 
