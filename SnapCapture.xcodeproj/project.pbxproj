@@ -28,7 +28,7 @@
 
 /* Begin PBXFileReference section */
 		4D04ADE419266DE6006E1C84 /* CaptureEMG.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CaptureEMG.cpp; sourceTree = SOURCE_ROOT; };
-		4D1F5A95192655EE002845BB /* emg-data-sample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "emg-data-sample"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D1F5A95192655EE002845BB /* SnapCapture */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SnapCapture; sourceTree = BUILT_PRODUCTS_DIR; };
 		787AB3931D98B75B009A74F8 /* myo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = myo.framework; sourceTree = SOURCE_ROOT; };
 		787AB3971D995C6F009A74F8 /* CaptureEMG.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaptureEMG.h; sourceTree = SOURCE_ROOT; };
 		787AB3981D995E37009A74F8 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = SOURCE_ROOT; };
@@ -58,7 +58,7 @@
 		4D1F5A96192655EE002845BB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4D1F5A95192655EE002845BB /* emg-data-sample */,
+				4D1F5A95192655EE002845BB /* SnapCapture */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -86,9 +86,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4D1F5A94192655EE002845BB /* emg-data-sample */ = {
+		4D1F5A94192655EE002845BB /* SnapCapture */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4D1F5A9E192655EE002845BB /* Build configuration list for PBXNativeTarget "emg-data-sample" */;
+			buildConfigurationList = 4D1F5A9E192655EE002845BB /* Build configuration list for PBXNativeTarget "SnapCapture" */;
 			buildPhases = (
 				4D1F5A91192655EE002845BB /* Sources */,
 				4D1F5A92192655EE002845BB /* Frameworks */,
@@ -98,9 +98,9 @@
 			);
 			dependencies = (
 			);
-			name = "emg-data-sample";
+			name = SnapCapture;
 			productName = "emg-data-sample";
-			productReference = 4D1F5A95192655EE002845BB /* emg-data-sample */;
+			productReference = 4D1F5A95192655EE002845BB /* SnapCapture */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -112,7 +112,7 @@
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "";
 			};
-			buildConfigurationList = 4D1F5A90192655EE002845BB /* Build configuration list for PBXProject "emg-data-sample" */;
+			buildConfigurationList = 4D1F5A90192655EE002845BB /* Build configuration list for PBXProject "SnapCapture" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -124,7 +124,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4D1F5A94192655EE002845BB /* emg-data-sample */,
+				4D1F5A94192655EE002845BB /* SnapCapture */,
 			);
 		};
 /* End PBXProject section */
@@ -234,7 +234,7 @@
 					"$(PROJECT_DIR)",
 				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path";
-				PRODUCT_NAME = "emg-data-sample";
+				PRODUCT_NAME = SnapCapture;
 			};
 			name = Debug;
 		};
@@ -247,14 +247,14 @@
 					"$(PROJECT_DIR)",
 				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path";
-				PRODUCT_NAME = "emg-data-sample";
+				PRODUCT_NAME = SnapCapture;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4D1F5A90192655EE002845BB /* Build configuration list for PBXProject "emg-data-sample" */ = {
+		4D1F5A90192655EE002845BB /* Build configuration list for PBXProject "SnapCapture" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4D1F5A9C192655EE002845BB /* Debug */,
@@ -263,7 +263,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4D1F5A9E192655EE002845BB /* Build configuration list for PBXNativeTarget "emg-data-sample" */ = {
+		4D1F5A9E192655EE002845BB /* Build configuration list for PBXNativeTarget "SnapCapture" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4D1F5A9F192655EE002845BB /* Debug */,
