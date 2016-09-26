@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4D04ADE519266DE6006E1C84 /* emg-data-sample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4D04ADE419266DE6006E1C84 /* emg-data-sample.cpp */; };
+		4D04ADE519266DE6006E1C84 /* CaptureEMG.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4D04ADE419266DE6006E1C84 /* CaptureEMG.cpp */; };
 		787AB3941D98B75B009A74F8 /* myo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 787AB3931D98B75B009A74F8 /* myo.framework */; };
 		787AB3961D98B82A009A74F8 /* myo.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 787AB3931D98B75B009A74F8 /* myo.framework */; };
 /* End PBXBuildFile section */
@@ -26,7 +26,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4D04ADE419266DE6006E1C84 /* emg-data-sample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "emg-data-sample.cpp"; sourceTree = SOURCE_ROOT; };
+		4D04ADE419266DE6006E1C84 /* CaptureEMG.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CaptureEMG.cpp; sourceTree = SOURCE_ROOT; };
 		4D1F5A95192655EE002845BB /* emg-data-sample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "emg-data-sample"; sourceTree = BUILT_PRODUCTS_DIR; };
 		787AB3931D98B75B009A74F8 /* myo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = myo.framework; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -46,7 +46,7 @@
 		4D1F5A8C192655EE002845BB = {
 			isa = PBXGroup;
 			children = (
-				4D1F5A97192655EE002845BB /* emg-data-sample */,
+				4D1F5A97192655EE002845BB /* Source */,
 				4D1F5AA31926563B002845BB /* Frameworks */,
 				4D1F5A96192655EE002845BB /* Products */,
 			);
@@ -60,11 +60,12 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4D1F5A97192655EE002845BB /* emg-data-sample */ = {
+		4D1F5A97192655EE002845BB /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				4D04ADE419266DE6006E1C84 /* emg-data-sample.cpp */,
+				4D04ADE419266DE6006E1C84 /* CaptureEMG.cpp */,
 			);
+			name = Source;
 			path = "emg-data-sample";
 			sourceTree = "<group>";
 		};
@@ -128,7 +129,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4D04ADE519266DE6006E1C84 /* emg-data-sample.cpp in Sources */,
+				4D04ADE519266DE6006E1C84 /* CaptureEMG.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
