@@ -10,6 +10,7 @@
 		4D04ADE519266DE6006E1C84 /* CaptureEMG.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4D04ADE419266DE6006E1C84 /* CaptureEMG.cpp */; };
 		787AB3941D98B75B009A74F8 /* myo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 787AB3931D98B75B009A74F8 /* myo.framework */; };
 		787AB3961D98B82A009A74F8 /* myo.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 787AB3931D98B75B009A74F8 /* myo.framework */; };
+		787AB3991D995E37009A74F8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 787AB3981D995E37009A74F8 /* main.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -30,6 +31,7 @@
 		4D1F5A95192655EE002845BB /* emg-data-sample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "emg-data-sample"; sourceTree = BUILT_PRODUCTS_DIR; };
 		787AB3931D98B75B009A74F8 /* myo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = myo.framework; sourceTree = SOURCE_ROOT; };
 		787AB3971D995C6F009A74F8 /* CaptureEMG.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaptureEMG.h; sourceTree = SOURCE_ROOT; };
+		787AB3981D995E37009A74F8 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 			children = (
 				4D04ADE419266DE6006E1C84 /* CaptureEMG.cpp */,
 				787AB3971D995C6F009A74F8 /* CaptureEMG.h */,
+				787AB3981D995E37009A74F8 /* main.cpp */,
 			);
 			name = Source;
 			path = "emg-data-sample";
@@ -131,6 +134,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				787AB3991D995E37009A74F8 /* main.cpp in Sources */,
 				4D04ADE519266DE6006E1C84 /* CaptureEMG.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

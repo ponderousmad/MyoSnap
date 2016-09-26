@@ -68,13 +68,3 @@ void CaptureEMG::Sample::print() const
     }
     std::cout << std::endl;
 }
-
-int main(int argc, char** argv)
-{
-    CaptureEMG capture;
-    if (capture.setup()) {
-        while(1) {
-            capture.update();
-        }
-    }
-}
