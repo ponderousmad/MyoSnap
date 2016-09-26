@@ -34,7 +34,7 @@ bool CaptureEMG::setup() {
         myo::Myo* myo = mHub.waitForMyo(10000);
         
         if (myo) {
-            std::cout << "Connected to a Myo armband!" << std::endl << std::endl;
+            std::cout << "Connected to a Myo armband!" << std::endl;
             myo->setStreamEmg(myo::Myo::streamEmgEnabled);
             return true;
         } else {
@@ -62,7 +62,7 @@ CaptureEMG::Sample::Sample(uint64_t timestamp, const int8_t* emg)
 
 void CaptureEMG::Sample::print() const
 {
-    std::cout << mTimestamp;
+    std::cout << "E," << mTimestamp;
     for (size_t i = 0; i < mEmg.size(); i++) {
         std::cout << "," << static_cast<int>(mEmg[i]);
     }

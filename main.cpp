@@ -25,10 +25,13 @@ int main(int argc, char** argv)
         return -2;
     }
     
+    std::cout << std::endl << std::endl;
+    
     while(sRunning) {
         emg.update();
         audio.update();
     }
-    std::cout << "And done!" << std::endl << std::endl;
+    audio.cleanup();
+    std::cout << "Capture Complete." << std::endl << std::endl;
     return 0;
 }

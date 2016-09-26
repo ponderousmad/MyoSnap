@@ -12,7 +12,7 @@ public:
     void notePropertyChanged(AudioQueuePropertyID id) {}
     void logData(float energy, UInt32 packets, UInt64 timestamp);
     float processAudio(AudioQueueRef queue, AudioQueueBufferRef buffer, const AudioStreamPacketDescription *description, UInt32 packets);
-    bool stopRecording();
+    bool cleanup();
     
     void update();
     

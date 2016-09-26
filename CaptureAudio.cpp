@@ -204,9 +204,8 @@ float CaptureAudio::processAudio(AudioQueueRef queue, AudioQueueBufferRef buffer
     return static_cast<float>(noise / packets);
 }
 
-bool CaptureAudio::stopRecording() {
+bool CaptureAudio::cleanup() {
     // end recording
-    std::cout << "* recording done *" << std::endl;
     mRunning = false;
     bool stopped = (AudioQueueStop(mQueue, TRUE), "AudioQueueStop failed");
     AudioQueueDispose(mQueue, TRUE);
