@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4D04ADE519266DE6006E1C84 /* emg-data-sample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4D04ADE419266DE6006E1C84 /* emg-data-sample.cpp */; };
-		4D04ADE719266DF9006E1C84 /* myo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D04ADE619266DF9006E1C84 /* myo.framework */; };
-		4D63875C192670E5005BE0A6 /* myo.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4D04ADE619266DF9006E1C84 /* myo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -19,7 +17,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
-				4D63875C192670E5005BE0A6 /* myo.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -27,7 +24,6 @@
 
 /* Begin PBXFileReference section */
 		4D04ADE419266DE6006E1C84 /* emg-data-sample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "emg-data-sample.cpp"; sourceTree = SOURCE_ROOT; };
-		4D04ADE619266DF9006E1C84 /* myo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = myo.framework; path = ../myo.framework; sourceTree = SOURCE_ROOT; };
 		4D1F5A95192655EE002845BB /* emg-data-sample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "emg-data-sample"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -36,7 +32,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4D04ADE719266DF9006E1C84 /* myo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,14 +60,12 @@
 			children = (
 				4D04ADE419266DE6006E1C84 /* emg-data-sample.cpp */,
 			);
-			name = "emg-data-sample";
 			path = "emg-data-sample";
 			sourceTree = "<group>";
 		};
 		4D1F5AA31926563B002845BB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4D04ADE619266DF9006E1C84 /* myo.framework */,
 			);
 			name = Frameworks;
 			path = "emg-data-sample";
