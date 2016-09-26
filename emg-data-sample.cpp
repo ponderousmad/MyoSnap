@@ -52,11 +52,12 @@ public:
     // There are other virtual functions in DeviceListener that we could override here, like onAccelerometerData().
     // For this example, the functions overridden above are sufficient.
    
-    void print() const
+    void print()
     {
         for (auto i = mSamples.begin(); i != mSamples.end(); ++i) {
             i->print();
         }
+        mSamples.clear();
     }
 
 private:
