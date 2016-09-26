@@ -61,9 +61,10 @@ static void onBuffer(void*                               userData,
                      const AudioStreamPacketDescription* description)
 {
     CaptureAudio *capture = (CaptureAudio *)userData;
-    capture->logData(buffer->mAudioData, buffer->mAudioDataByteSize, packets, startTime->mHostTime);
+    
     if (packets > 0) {
-        capture->processAudio(queue, buffer, description, packets);
+        float energy = capture->processAudio(queue, buffer, description, packets);
+        capture->logData(energy, packets, startTime->mHostTime);
     }
 }
 
@@ -98,7 +99,6 @@ OSStatus getSampleRate(Float64 *outSampleRate)
 
 CaptureAudio::CaptureAudio(size_t buffers)
     : mBufferCount(buffers)
-    , mVerbose(true)
     , mRunning(false)
 {
 }
@@ -172,13 +172,10 @@ bool CaptureAudio::setup()
     return check(AudioQueueStart(mQueue, NULL), "AudioQueueStart failed");
 }
 
-void CaptureAudio::logData(void *buffer, UInt32 bytes, UInt32 packets, UInt64 timestamp) {
-    if (mVerbose) {
-        std::stringstream out;
-        out << "For " << timestamp;
-        out << " got buff data: " << buffer << " bytes: " << bytes << " packets: " << packets;
-        mLogData.enqueue(out.str());
-    }
+void CaptureAudio::logData(float energy, UInt32 packets, UInt64 timestamp) {
+    std::stringstream out;
+    out << "A," << timestamp << "," << energy << "," << packets;
+    mLogData.enqueue(out.str());
 }
 
 void CaptureAudio::update() {
@@ -188,20 +185,14 @@ void CaptureAudio::update() {
     }
 }
 
-void CaptureAudio::processAudio(AudioQueueRef queue, AudioQueueBufferRef buffer, const AudioStreamPacketDescription *description, UInt32 packets) {
-    if (mVerbose) {
-        std::stringstream out;
-        UInt32 bytesPerPacket = buffer->mAudioDataByteSize / packets;
-        UInt32 stride = bytesPerPacket / 2;
-        const SInt16* samples = reinterpret_cast<const SInt16*>(buffer->mAudioData);
-        for (UInt32 i = 0; i < packets; ++i) {
-            SInt16 sample = CFSwapInt16BigToHost(samples[i * stride]);
-            if (i > 0) {
-                out << ",";
-            }
-            out << sample;
-        }
-        mLogData.enqueue(out.str());
+float CaptureAudio::processAudio(AudioQueueRef queue, AudioQueueBufferRef buffer, const AudioStreamPacketDescription *description, UInt32 packets) {
+    UInt32 bytesPerPacket = buffer->mAudioDataByteSize / packets;
+    UInt32 stride = bytesPerPacket / 2;
+    const SInt16* samples = reinterpret_cast<const SInt16*>(buffer->mAudioData);
+    double noise = 0;
+    for (UInt32 i = 0; i < packets; ++i) {
+        SInt16 sample = CFSwapInt16BigToHost(samples[i * stride]);
+        noise += abs(sample);
     }
     mRecordPacket += packets;
     
@@ -209,6 +200,8 @@ void CaptureAudio::processAudio(AudioQueueRef queue, AudioQueueBufferRef buffer,
     if (mRunning) {
         check(AudioQueueEnqueueBuffer(queue, buffer, 0, NULL), "AudioQueueEnqueueBuffer failed");
     }
+    
+    return static_cast<float>(noise / packets);
 }
 
 bool CaptureAudio::stopRecording() {
