@@ -29,6 +29,7 @@
 		4D04ADE419266DE6006E1C84 /* CaptureEMG.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CaptureEMG.cpp; sourceTree = SOURCE_ROOT; };
 		4D1F5A95192655EE002845BB /* emg-data-sample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "emg-data-sample"; sourceTree = BUILT_PRODUCTS_DIR; };
 		787AB3931D98B75B009A74F8 /* myo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = myo.framework; sourceTree = SOURCE_ROOT; };
+		787AB3971D995C6F009A74F8 /* CaptureEMG.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaptureEMG.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				4D04ADE419266DE6006E1C84 /* CaptureEMG.cpp */,
+				787AB3971D995C6F009A74F8 /* CaptureEMG.h */,
 			);
 			name = Source;
 			path = "emg-data-sample";
@@ -105,7 +107,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0800;
-				ORGANIZATIONNAME = "Thalmic Labs";
+				ORGANIZATIONNAME = "";
 			};
 			buildConfigurationList = 4D1F5A90192655EE002845BB /* Build configuration list for PBXProject "emg-data-sample" */;
 			compatibilityVersion = "Xcode 3.2";
