@@ -190,3 +190,6 @@ xcuserdata/
 *.moved-aside
 *.xccheckout
 *.xcscmblueprint
+
+myo.framework/
+
