@@ -11,52 +11,61 @@
 
 #include <myo/myo.hpp>
 
+class Sample {
+public:
+    Sample(uint64_t timestamp, const int8_t* emg)
+        : mEmg()
+        , mTimestamp(timestamp)
+    {
+        for (int i = 0; i < 8; i++) {
+            mEmg[i] = emg[i];
+        }
+    }
+    
+    void print() const
+    {
+        std::cout << mTimestamp;
+        // Print out the EMG data.
+        for (size_t i = 0; i < mEmg.size(); i++) {
+            std::cout << "," << static_cast<int>(mEmg[i]);
+        }
+        std::cout << std::endl;
+    }
+private:
+    std::array<int8_t, 8> mEmg;
+    uint64_t mTimestamp;
+};
+
 class DataCollector : public myo::DeviceListener {
 public:
     DataCollector()
-    : emgSamples()
     {
     }
 
     // onUnpair() is called whenever the Myo is disconnected from Myo Connect by the user.
     void onUnpair(myo::Myo* myo, uint64_t timestamp)
     {
-        // We've lost a Myo.
-        // Let's clean up some leftover state.
-        emgSamples.fill(0);
     }
 
     // onEmgData() is called whenever a paired Myo has provided new EMG data, and EMG streaming is enabled.
     void onEmgData(myo::Myo* myo, uint64_t timestamp, const int8_t* emg)
     {
-        for (int i = 0; i < 8; i++) {
-            emgSamples[i] = emg[i];
-        }
+        mSamples.push_back(Sample(timestamp, emg));
     }
 
     // There are other virtual functions in DeviceListener that we could override here, like onAccelerometerData().
     // For this example, the functions overridden above are sufficient.
-
-    // We define this function to print the current values that were updated by the on...() functions above.
-    void print()
+   
+    void print() const
     {
-        // Clear the current line
-        std::cout << '\r';
-
-        // Print out the EMG data.
-        for (size_t i = 0; i < emgSamples.size(); i++) {
-            std::ostringstream oss;
-            oss << static_cast<int>(emgSamples[i]);
-            std::string emgString = oss.str();
-
-            std::cout << '[' << emgString << std::string(4 - emgString.size(), ' ') << ']';
+        for (auto i = mSamples.begin(); i != mSamples.end(); ++i) {
+            i->print();
         }
-
-        std::cout << std::flush;
     }
 
+private:
     // The values of this array is set by onEmgData() above.
-    std::array<int8_t, 8> emgSamples;
+    std::vector<Sample> mSamples;
 };
 
 int main(int argc, char** argv)
@@ -96,11 +105,7 @@ int main(int argc, char** argv)
 
     // Finally we enter our main loop.
     while (1) {
-        // In each iteration of our main loop, we run the Myo event loop for a set number of milliseconds.
-        // In this case, we wish to update our display 50 times a second, so we run for 1000/20 milliseconds.
-        hub.run(1000/20);
-        // After processing events, we call the print() member function we defined above to print out the values we've
-        // obtained from any events that have occurred.
+        hub.run(1);
         collector.print();
     }
 
