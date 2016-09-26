@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4D04ADE519266DE6006E1C84 /* emg-data-sample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4D04ADE419266DE6006E1C84 /* emg-data-sample.cpp */; };
+		787AB3941D98B75B009A74F8 /* myo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 787AB3931D98B75B009A74F8 /* myo.framework */; };
+		787AB3961D98B82A009A74F8 /* myo.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 787AB3931D98B75B009A74F8 /* myo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -17,6 +19,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				787AB3961D98B82A009A74F8 /* myo.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -25,6 +28,7 @@
 /* Begin PBXFileReference section */
 		4D04ADE419266DE6006E1C84 /* emg-data-sample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "emg-data-sample.cpp"; sourceTree = SOURCE_ROOT; };
 		4D1F5A95192655EE002845BB /* emg-data-sample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "emg-data-sample"; sourceTree = BUILT_PRODUCTS_DIR; };
+		787AB3931D98B75B009A74F8 /* myo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = myo.framework; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +36,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				787AB3941D98B75B009A74F8 /* myo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,6 +71,7 @@
 		4D1F5AA31926563B002845BB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				787AB3931D98B75B009A74F8 /* myo.framework */,
 			);
 			name = Frameworks;
 			path = "emg-data-sample";
@@ -161,6 +167,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -194,6 +201,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = macosx;
 			};
@@ -205,6 +213,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					$SOURCE_ROOT/../,
+					"$(PROJECT_DIR)",
 				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path";
 				PRODUCT_NAME = "emg-data-sample";
@@ -217,6 +226,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					$SOURCE_ROOT/../,
+					"$(PROJECT_DIR)",
 				);
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path";
 				PRODUCT_NAME = "emg-data-sample";
