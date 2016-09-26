@@ -1,6 +1,6 @@
 #include "CaptureAudio.h"
-
 #include <iostream>
+#include <sstream>
 
 bool check(OSStatus error, const char* context)
 {
@@ -107,12 +107,10 @@ bool CaptureAudio::setup()
 {
     int i, bufferByteSize;
     AudioStreamBasicDescription recordFormat;
-    CaptureAudio aqr;
     UInt32 size;
     
     // fill structures with 0/NULL
     memset(&recordFormat, 0, sizeof(recordFormat));
-    memset(&aqr, 0, sizeof(aqr));
 
     // adapt record format to hardware and apply defaults
     if (recordFormat.mSampleRate == 0.) {
@@ -129,7 +127,9 @@ bool CaptureAudio::setup()
         recordFormat.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked;
         recordFormat.mBitsPerChannel = 16;
         recordFormat.mBytesPerPacket = recordFormat.mBytesPerFrame =
-        (recordFormat.mBitsPerChannel / 8) * recordFormat.mChannelsPerFrame;
+            (recordFormat.mBitsPerChannel / 8) * recordFormat.mChannelsPerFrame;
+        recordFormat.mBytesPerPacket = 2 * recordFormat.mChannelsPerFrame;
+        recordFormat.mBytesPerFrame = 2 * recordFormat.mChannelsPerFrame;
         recordFormat.mFramesPerPacket = 1;
         recordFormat.mReserved = 0;
     }
@@ -174,18 +174,35 @@ bool CaptureAudio::setup()
 
 void CaptureAudio::logData(void *buffer, UInt32 bytes, UInt32 packets, UInt64 timestamp) {
     if (mVerbose) {
-        std::cout << "At " << timestamp;
-        std::cout << " got buff data: " << buffer << " bytes: " << bytes << " packets: " << packets << std::endl;
+        std::stringstream out;
+        out << "For " << timestamp;
+        out << " got buff data: " << buffer << " bytes: " << bytes << " packets: " << packets;
+        mLogData.enqueue(out.str());
+    }
+}
+
+void CaptureAudio::update() {
+    std::string log;
+    while(mLogData.try_dequeue(log)) {
+        std::cout << log << std::endl;
     }
 }
 
 void CaptureAudio::processAudio(AudioQueueRef queue, AudioQueueBufferRef buffer, const AudioStreamPacketDescription *description, UInt32 packets) {
-    
-    /*
-     Check(AudioFileWritePackets(aqr->recordFile, FALSE, inBuffer->mAudioDataByteSize,
-     inPacketDesc, aqr->recordPacket, &inNumPackets, inBuffer->mAudioData),
-     "AudioFileWritePackets failed");
-     */
+    if (mVerbose) {
+        std::stringstream out;
+        UInt32 bytesPerPacket = buffer->mAudioDataByteSize / packets;
+        UInt32 stride = bytesPerPacket / 2;
+        const SInt16* samples = reinterpret_cast<const SInt16*>(buffer->mAudioData);
+        for (UInt32 i = 0; i < packets; ++i) {
+            SInt16 sample = CFSwapInt16BigToHost(samples[i * stride]);
+            if (i > 0) {
+                out << ",";
+            }
+            out << sample;
+        }
+        mLogData.enqueue(out.str());
+    }
     mRecordPacket += packets;
     
     // if we're not stopping, re-enqueue the buffer so that it gets filled again

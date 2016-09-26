@@ -27,6 +27,7 @@ int main(int argc, char** argv)
     
     while(sRunning) {
         emg.update();
+        audio.update();
     }
     std::cout << "And done!" << std::endl << std::endl;
     return 0;

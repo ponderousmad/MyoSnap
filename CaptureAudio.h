@@ -2,6 +2,7 @@
 #define CaptureAudio_h
 
 #include <AudioToolbox/AudioToolbox.h>
+#include "readerwriterqueue.h"
 
 class CaptureAudio {
 public:
@@ -13,12 +14,16 @@ public:
     void processAudio(AudioQueueRef queue, AudioQueueBufferRef buffer, const AudioStreamPacketDescription *description, UInt32 packets);
     bool stopRecording();
     
+    void update();
+    
 private:
     AudioQueueRef				mQueue;
     size_t                      mBufferCount;
     SInt64						mRecordPacket; // current packet number in record file
     bool						mRunning;
     bool						mVerbose;
+    
+    moodycamel::ReaderWriterQueue<std::string> mLogData;
 };
 
 #endif // CaptureAudio_h

@@ -243,6 +243,7 @@
 					$SOURCE_ROOT/../,
 					"$(PROJECT_DIR)",
 				);
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../readerwriterqueue";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path";
 				PRODUCT_NAME = SnapCapture;
 			};
@@ -256,6 +257,7 @@
 					$SOURCE_ROOT/../,
 					"$(PROJECT_DIR)",
 				);
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../readerwriterqueue";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path";
 				PRODUCT_NAME = SnapCapture;
 			};
