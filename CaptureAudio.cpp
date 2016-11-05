@@ -1,214 +1,81 @@
 #include "CaptureAudio.h"
 #include <iostream>
-#include <sstream>
+#include <iomanip>
+#include <chrono>
+#include <cmath>
 
-bool check(OSStatus error, const char* context)
-{
-    if (error) {
-        std::cerr << "Error." << error << context << std::endl;
-        return false;
+const int SAMPLES_RATE = 44100;
+const int SAMPLES_PER_BUFFER = 4096;
+const int CHANNELS = 1;
+const int BUFFER_SIZE = CHANNELS * SAMPLES_PER_BUFFER;
+const float SAMPLE_MAX = 2 << 15;
+
+using namespace std::chrono;
+
+uint64_t getTimestamp() {
+    milliseconds ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
+    return static_cast<uint64_t>(ms.count());
+}
+
+ALCdevice* setupCapture() {
+    alGetError();
+    ALCdevice* device = alcCaptureOpenDevice(NULL, SAMPLES_RATE, AL_FORMAT_MONO16, BUFFER_SIZE);
+    if (alGetError() != AL_NO_ERROR) {
+        return nullptr;
     }
-    return true;
+    alcCaptureStart(device);
+    return device;
 }
 
-// ____________________________________________________________________________________
-// Determine the size, in bytes, of a buffer necessary to represent the supplied number
-// of seconds of audio data.
-int computeBufferSize(const AudioStreamBasicDescription *format, AudioQueueRef queue, float seconds)
-{
-    int packets, frames, bytes;
-    frames = (int)ceil(seconds * format->mSampleRate);
-    
-    if (format->mBytesPerFrame > 0) {
-        bytes = frames * format->mBytesPerFrame;
-    } else {
-        UInt32 maxPacketSize;
-        if (format->mBytesPerPacket > 0) {
-            maxPacketSize = format->mBytesPerPacket;	// constant packet size
-        } else {
-            UInt32 propertySize = sizeof(maxPacketSize);
-            check(AudioQueueGetProperty(queue, kAudioConverterPropertyMaximumOutputPacketSize, &maxPacketSize,
-                                                &propertySize), "couldn't get queue's maximum output packet size");
-        }
-        if (format->mFramesPerPacket > 0) {
-            packets = frames / format->mFramesPerPacket;
-        } else {
-            packets = frames;	// worst-case scenario: 1 frame in a packet
-        }
-        if (packets == 0) { // sanity check
-            packets = 1;
-        }
-        bytes = packets * maxPacketSize;
-    }
-    return bytes;
+ALint captureSamples(ALCdevice* device, ALshort* buffer) {
+    ALint sampleCount = 0;
+    alcGetIntegerv(device, ALC_CAPTURE_SAMPLES, (ALCsizei)sizeof(ALint), &sampleCount);
+    alcCaptureSamples(device, (ALCvoid*)buffer, sampleCount);
+    return sampleCount;
 }
 
-// ____________________________________________________________________________________
-// AudioQueue callback function, called when a property changes.
-void onPropertyChanged(void *userData, AudioQueueRef queue, AudioQueuePropertyID propertyID)
-{
-    CaptureAudio *capture = (CaptureAudio *)userData;
-    capture->notePropertyChanged(propertyID);
+void cleanupCapture(ALCdevice* device) {
+    alcCaptureStop(device);
+    alcCaptureCloseDevice(device);
 }
 
-// ____________________________________________________________________________________
-// AudioQueue callback function, called when an input buffers has been filled.
-static void onBuffer(void*                               userData,
-                     AudioQueueRef                       queue,
-                     AudioQueueBufferRef                 buffer,
-                     const AudioTimeStamp*               startTime,
-                     UInt32                              packets,
-                     const AudioStreamPacketDescription* description)
+CaptureAudio::CaptureAudio()
+    : mDevice(nullptr)
+    , mBuffer(new ALshort[BUFFER_SIZE])
 {
-    CaptureAudio *capture = (CaptureAudio *)userData;
-    
-    if (packets > 0) {
-        float energy = capture->processAudio(queue, buffer, description, packets);
-        capture->logData(energy, packets, startTime->mHostTime);
-    }
 }
 
-// ____________________________________________________________________________________
-// get sample rate of the default input device
-OSStatus getSampleRate(Float64 *outSampleRate)
-{
-    OSStatus err;
-    AudioDeviceID deviceID = 0;
-    
-    // get the default input device
-    AudioObjectPropertyAddress addr;
-    UInt32 size;
-    addr.mSelector = kAudioHardwarePropertyDefaultInputDevice;
-    addr.mScope = kAudioObjectPropertyScopeGlobal;
-    addr.mElement = 0;
-    size = sizeof(AudioDeviceID);
-    err = AudioHardwareServiceGetPropertyData(kAudioObjectSystemObject, &addr, 0, NULL, &size, &deviceID);
-    if (err)  {
-        return err;
-    }
-    
-    // get its sample rate
-    addr.mSelector = kAudioDevicePropertyNominalSampleRate;
-    addr.mScope = kAudioObjectPropertyScopeGlobal;
-    addr.mElement = 0;
-    size = sizeof(Float64);
-    err = AudioHardwareServiceGetPropertyData(deviceID, &addr, 0, NULL, &size, outSampleRate);
-    
-    return err;
-}
-
-CaptureAudio::CaptureAudio(size_t buffers)
-    : mBufferCount(buffers)
-    , mRunning(false)
-{
+CaptureAudio::~CaptureAudio() {
+    delete[] mBuffer;
 }
 
 bool CaptureAudio::setup()
 {
-    int i, bufferByteSize;
-    AudioStreamBasicDescription recordFormat;
-    UInt32 size;
-    
-    // fill structures with 0/NULL
-    memset(&recordFormat, 0, sizeof(recordFormat));
-
-    // adapt record format to hardware and apply defaults
-    if (recordFormat.mSampleRate == 0.) {
-        check(getSampleRate(&recordFormat.mSampleRate), "Can't get sample rate");
-    }
-    
-    if (recordFormat.mChannelsPerFrame == 0) {
-        recordFormat.mChannelsPerFrame = 2;
-    }
-    
-    if (recordFormat.mFormatID == 0 || recordFormat.mFormatID == kAudioFormatLinearPCM) {
-        // default to PCM, 16 bit int
-        recordFormat.mFormatID = kAudioFormatLinearPCM;
-        recordFormat.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked;
-        recordFormat.mBitsPerChannel = 16;
-        recordFormat.mBytesPerPacket = recordFormat.mBytesPerFrame =
-            (recordFormat.mBitsPerChannel / 8) * recordFormat.mChannelsPerFrame;
-        recordFormat.mBytesPerPacket = 2 * recordFormat.mChannelsPerFrame;
-        recordFormat.mBytesPerFrame = 2 * recordFormat.mChannelsPerFrame;
-        recordFormat.mFramesPerPacket = 1;
-        recordFormat.mReserved = 0;
-    }
-
-    // create the queue
-    if (!check(AudioQueueNewInput(
-        &recordFormat,
-        onBuffer,
-        this /* userData */,
-        NULL /* run loop */,
-        NULL /* run loop mode */,
-        0 /* flags */,
-        &mQueue), "AudioQueueNewInput failed"))
-    {
-        return false;
-    }
-    
-    // get the record format back from the queue's audio converter --
-    // the file may require a more specific stream description than was necessary to create the encoder.
-    size = sizeof(recordFormat);
-    if(!check(AudioQueueGetProperty(mQueue, kAudioConverterCurrentOutputStreamDescription,
-                                    &recordFormat, &size), "couldn't get queue's format")) {
-        return false;
-    }
-    
-    // allocate and enqueue buffers
-    bufferByteSize = computeBufferSize(&recordFormat, mQueue, 0.1);	// enough bytes for half a second
-    for (i = 0; i < mBufferCount; ++i) {
-        AudioQueueBufferRef buffer;
-        if (!check(AudioQueueAllocateBuffer(mQueue, bufferByteSize, &buffer), "AudioQueueAllocateBuffer failed")) {
-            return false;
-        }
-        if (!check(AudioQueueEnqueueBuffer(mQueue, buffer, 0, NULL), "AudioQueueEnqueueBuffer failed")) {
-            return false;
-        }
-    }
-    
-    // start the queue
-    mRunning = true;
-    return check(AudioQueueStart(mQueue, NULL), "AudioQueueStart failed");
+    mDevice = setupCapture();
+    return mDevice != nullptr;
 }
 
-void CaptureAudio::logData(float energy, UInt32 packets, UInt64 timestamp) {
-    std::stringstream out;
-    out << "A," << timestamp << "," << energy << "," << packets;
-    mLogData.enqueue(out.str());
+void CaptureAudio::logData(float energy, int samples, uint64_t timestamp) {
+    std::cout << "A," << timestamp << "," << std::fixed << std::setprecision(4) << energy << "," << samples << std::endl;
 }
 
 void CaptureAudio::update() {
-    std::string log;
-    while(mLogData.try_dequeue(log)) {
-        std::cout << log << std::endl;
+    if (!mDevice) {
+        return;
     }
-}
-
-float CaptureAudio::processAudio(AudioQueueRef queue, AudioQueueBufferRef buffer, const AudioStreamPacketDescription *description, UInt32 packets) {
-    UInt32 bytesPerPacket = buffer->mAudioDataByteSize / packets;
-    UInt32 stride = bytesPerPacket / 2;
-    const SInt16* samples = reinterpret_cast<const SInt16*>(buffer->mAudioData);
-    double noise = 0;
-    for (UInt32 i = 0; i < packets; ++i) {
-        SInt16 sample = CFSwapInt16BigToHost(samples[i * stride]);
-        noise += abs(sample);
+    ALint samples = captureSamples(mDevice, mBuffer);
+    float noise = 0;
+    if (samples) {
+        for (int s = 0; s < samples; ++s) {
+            noise += std::fabs(mBuffer[s] / SAMPLE_MAX);
+        }
+        logData(noise / samples, samples, getTimestamp());
     }
-    mRecordPacket += packets;
-    
-    // if we're not stopping, re-enqueue the buffer so that it gets filled again
-    if (mRunning) {
-        check(AudioQueueEnqueueBuffer(queue, buffer, 0, NULL), "AudioQueueEnqueueBuffer failed");
-    }
-    
-    return static_cast<float>(noise / packets);
 }
 
 bool CaptureAudio::cleanup() {
-    // end recording
-    mRunning = false;
-    bool stopped = (AudioQueueStop(mQueue, TRUE), "AudioQueueStop failed");
-    AudioQueueDispose(mQueue, TRUE);
-    return stopped;
+    cleanupCapture(mDevice);
+    mDevice = nullptr;
+    return true;
 }
 
