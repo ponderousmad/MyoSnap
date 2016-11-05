@@ -13,7 +13,7 @@ const float SAMPLE_MAX = 2 << 15;
 using namespace std::chrono;
 
 uint64_t getTimestamp() {
-    milliseconds ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
+    microseconds ms = duration_cast<microseconds>(high_resolution_clock::now().time_since_epoch());
     return static_cast<uint64_t>(ms.count());
 }
 
